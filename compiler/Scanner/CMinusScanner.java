@@ -3,8 +3,6 @@ package compiler.Scanner;
 import java.io.BufferedReader;
 import java.io.IOException;
 
-import javax.lang.model.util.ElementScanner6;
-
 import compiler.Scanner.Token.TokenType;
 
 public class CMinusScanner implements Scanner
@@ -47,7 +45,7 @@ public class CMinusScanner implements Scanner
         StateType state = StateType.START;
 
         boolean skippedChar = false;
-        char skippedCharValue;
+        char skippedCharValue = '?';
         
 
         while(state != StateType.DONE)
