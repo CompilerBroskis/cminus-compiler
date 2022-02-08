@@ -4,6 +4,7 @@ public class Token
 {
     static public enum TokenType
     {
+        ID_TOKEN,
         INT_TOKEN,
         DOUBLE_TOKEN,
         IF_TOKEN,
@@ -21,7 +22,13 @@ public class Token
         RB_TOKEN,
         LCB_TOKEN,
         RCB_TOKEN,
-        EOF_TOKEN
+        ASSIGN_TOKEN,
+        NOTEQ_TOKEN, //!=
+        LTEQ_TOKEN, //<=
+        GTEQ_TOKEN, //>=
+        EQEQ_TOKEN, //==
+        EOF_TOKEN,
+        ERROR_TOKEN
     }
 
     private TokenType tokenType;
