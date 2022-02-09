@@ -40,7 +40,13 @@ public class Token
 
     public Token(TokenType tokenType)
     {
+        this(tokenType, null);
+    }
+
+    public Token(TokenType tokenType, Object tokenData)
+    {
         this.tokenType = tokenType;
+        this.tokenData = tokenData;
     }
 
     // GETTERS

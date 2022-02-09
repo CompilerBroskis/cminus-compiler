@@ -52,6 +52,7 @@ public class CMinusScanner implements Scanner
         boolean skippedChar = false;
         char skippedCharValue = '?';
         
+        String dataString = "";
 
         while(state != StateType.DONE)
         {
@@ -59,10 +60,12 @@ public class CMinusScanner implements Scanner
             {
                 // grab one char from the file
                 char c;
-                if(skippedChar){
+                if(skippedChar)
+                {
                     c = skippedCharValue;
                     skippedChar = false;
-                } else {
+                } else 
+                {
                     c = (char)inFile.read();
                 }
 
@@ -70,9 +73,15 @@ public class CMinusScanner implements Scanner
                 {
                     case START:
                         if(Character.isDigit(c))
+                        {
                             state = StateType.IN_NUM;
+                            dataString += c;
+                        }
                         else if(Character.isLetter(c))
+                        {
                             state = StateType.IN_ID;
+                            dataString += c;
+                        }
                         else if(c == '=')
                         {
                             state = StateType.IN_ASSIGN;
@@ -166,10 +175,12 @@ public class CMinusScanner implements Scanner
                         state = StateType.DONE;
                         break;
                     case IN_LT:
-                        if(c == '='){
+                        if(c == '=')
+                        {
                             currentToken = new Token(TokenType.LTEQ_TOKEN);
                         }
-                        else {
+                        else 
+                        {
                             currentToken = new Token(TokenType.LT_TOKEN);
                             //Mark skip and pass the value for the next loop
                             skippedChar = true;
@@ -178,10 +189,12 @@ public class CMinusScanner implements Scanner
                         state = StateType.DONE;
                         break;
                     case IN_GT:
-                        if(c == '='){
+                        if(c == '=')
+                        {
                             currentToken = new Token(TokenType.GTEQ_TOKEN);
                         }
-                        else {
+                        else 
+                        {
                             currentToken = new Token(TokenType.GT_TOKEN);
                             //Mark skip and pass the value for the next loop
                             skippedChar = true;
@@ -190,10 +203,12 @@ public class CMinusScanner implements Scanner
                         state = StateType.DONE;
                         break;
                     case IN_NOT:
-                        if(c == '='){
+                        if(c == '=')
+                        {
                             currentToken = new Token(TokenType.NOTEQ_TOKEN);
                         }
-                        else {
+                        else 
+                        {
                             // if there is a ! without a = then it is an error
                             currentToken = new Token(TokenType.ERROR_TOKEN);
                             //Mark skip and pass the value for the next loop
@@ -217,12 +232,14 @@ public class CMinusScanner implements Scanner
                         break;
                     case IN_COMMENT:
                         // Looking for the end of a comment
-                        if(c == '*'){                        
+                        if(c == '*')
+                        {                        
                             state = StateType.IN_COMMENT_END;                     
                         }
                         break;
                     case IN_COMMENT_END:
-                        if(c == '/'){
+                        if(c == '/')
+                        {
                             state = StateType.START;
                         }
                         else
@@ -231,36 +248,69 @@ public class CMinusScanner implements Scanner
                         }
                         break;
                     case IN_NUM:
-                        if(c == '.'){
+                        if(c == '.')
+                        {
                             state = StateType.IN_DOUBLE;
+                            dataString += c;
                         }
-                        else if(!Character.isDigit(c)){
-                            currentToken = new Token(TokenType.INT_TOKEN); //TODO Give the data of the integer
-                            state = StateType.DONE;
-
+                        else if(!Character.isDigit(c))
+                        {
+                            try
+                            {
+                                Integer intValue = Integer.parseInt(dataString);
+                                currentToken = new Token(TokenType.INT_TOKEN, intValue); //TODO Give the data of the integer
+                                state = StateType.DONE;
+                                dataString = ""; //Reset Data string
+                            }
+                            catch(Exception e){
+                                e.printStackTrace();
+                            }
+                            
                             //Mark skip and pass the value for the next loop
                             skippedChar = true;
                             skippedCharValue = c;
+                        }
+                        else 
+                        {
+                            dataString += c;
                         }
                         break;
                     case IN_DOUBLE:
-                        if(!Character.isDigit(c)){
-                            currentToken = new Token(TokenType.DOUBLE_TOKEN); //TODO Give the data of the integer
+                        if(!Character.isDigit(c))
+                        {
+                            try
+                            {
+                                Double doubleValue = Double.parseDouble(dataString);
+                                currentToken = new Token(TokenType.DOUBLE_TOKEN, doubleValue); //TODO Give the data of the integer
+                                state = StateType.DONE;
+                                dataString = ""; //Reset Data string
+                            } 
+                            catch(Exception e){
+                                e.printStackTrace();
+                            }
+
+                            //Mark skip and pass the value for the next loop
+                            skippedChar = true;
+                            skippedCharValue = c;
+                        }
+                        else 
+                        {
+                            dataString += c;
+                        }
+                        break;
+                    case IN_ID:
+                        if(!Character.isLetter(c))
+                        {
+                            currentToken = checkForKeyword(dataString); //TODO Give the data of the integer
                             state = StateType.DONE;
 
                             //Mark skip and pass the value for the next loop
                             skippedChar = true;
                             skippedCharValue = c;
                         }
-                        break;
-                    case IN_ID:
-                        if(!Character.isLetter(c)){
-                            currentToken = new Token(TokenType.ID_TOKEN); //TODO Give the data of the integer
-                            state = StateType.DONE;
-
-                            //Mark skip and pass the value for the next loop
-                            skippedChar = true;
-                            skippedCharValue = c;
+                        else 
+                        {
+                            dataString += c;
                         }
                         break;
                     case DONE:
@@ -278,6 +328,34 @@ public class CMinusScanner implements Scanner
             }
         }
 
-        return null;
+        return currentToken;
+    }
+
+    private Token checkForKeyword(String dataString){
+        if(dataString.equals("else"))
+        {
+            return new Token(TokenType.ELSE_TOKEN);
+        }
+        else if(dataString.equals("if"))
+        {
+            return new Token(TokenType.IF_TOKEN);
+        }
+        else if(dataString.equals("int"))
+        {
+            return new Token(TokenType.INT_TOKEN);
+        }
+        else if(dataString.equals("return"))
+        {
+            return new Token(TokenType.RETURN_TOKEN);
+        }
+        else if(dataString.equals("void"))
+        {
+            return new Token(TokenType.VOID_TOKEN);
+        }
+        else if(dataString.equals("while"))
+        {
+            return new Token(TokenType.WHILE_TOKEN);
+        }
+        return new Token(TokenType.ID_TOKEN, dataString);
     }
 }
