@@ -13,6 +13,10 @@ public class CMinusScanner implements Scanner
     public enum StateType
     {
         START,
+        IN_ASSIGN,
+        IN_LT,
+        IN_GT,
+        IN_NOT,
         IN_COMMENT,
         IN_COMMENT_START,
         IN_NUM,
@@ -70,77 +74,37 @@ public class CMinusScanner implements Scanner
                             state = StateType.IN_ID;
                         else if(c == '=')
                         {
-                            char nextC = (char) inFile.read();
-                            if(nextC == '='){
-                                currentToken = new Token(TokenType.EQEQ_TOKEN);
-                            }
-                            else {
-                                 currentToken = new Token(TokenType.ASSIGN_TOKEN);
-                                 //Mark skip and pass the value for the next loop
-                                 skippedChar = true;
-                                 skippedCharValue = nextC;
-                            }
-                            state = StateType.DONE;
+                            state = StateType.IN_ASSIGN;
+                            // char nextC = (char) inFile.read();
+                            // if(nextC == '='){
+                            //     currentToken = new Token(TokenType.EQEQ_TOKEN);
+                            // }
+                            // else {
+                            //      currentToken = new Token(TokenType.ASSIGN_TOKEN);
+                            //      //Mark skip and pass the value for the next loop
+                            //      skippedChar = true;
+                            //      skippedCharValue = nextC;
+                            // }
+                            // state = StateType.DONE;
                         }
                         else if(c == '<') 
                         {
-                            char nextC = (char) inFile.read();
-                            if(nextC == '='){
-                                currentToken = new Token(TokenType.LTEQ_TOKEN);
-                            }
-                            else {
-                                currentToken = new Token(TokenType.LT_TOKEN);
-                                //Mark skip and pass the value for the next loop
-                                skippedChar = true;
-                                skippedCharValue = nextC;
-                           }
-                           state = StateType.DONE;
+                            state = StateType.IN_LT;
                         }
                         else if(c == '>') 
                         {
-                            char nextC = (char) inFile.read();
-                            if(nextC == '='){
-                                currentToken = new Token(TokenType.GTEQ_TOKEN);
-                            }
-                            else {
-                                currentToken = new Token(TokenType.GT_TOKEN);
-                                //Mark skip and pass the value for the next loop
-                                skippedChar = true;
-                                skippedCharValue = nextC;
-                           }
-                           state = StateType.DONE;
+                           state = StateType.IN_GT;
                         }
                         else if(c == '!')
                         {
-                            char nextC = (char) inFile.read();
-                            if(nextC == '='){
-                                currentToken = new Token(TokenType.NOTEQ_TOKEN);
-                            }
-                            else {
-                                currentToken = new Token(TokenType.ERROR_TOKEN);
-                                //Mark skip and pass the value for the next loop
-                                skippedChar = true;
-                                skippedCharValue = nextC;
-                           }
-                           state = StateType.DONE;
+                           state = StateType.IN_NOT;
                         }
                         else if ((c == ' ') || (c == '\t') || (c == '\n'))
                             // skip these characters
                             continue;
                         else if(c == '/')
                         {
-                            char nextC = (char) inFile.read();
-                            if(nextC != '*'){
-                                currentToken = new Token(TokenType.DIV_TOKEN);
-                                state = StateType.DONE;
-
-                                //Mark skip and pass the value for the next loop
-                                skippedChar = true;
-                                skippedCharValue = nextC;
-                            } 
-                            else {
-                                state = StateType.IN_COMMENT;
-                            }
+                            state = StateType.IN_COMMENT_START;
                         }
                         else
                         {
@@ -188,6 +152,65 @@ public class CMinusScanner implements Scanner
                             }
                         }
                         break;
+                    case IN_ASSIGN:
+                        if(c == '=')
+                            currentToken = new Token(TokenType.EQEQ_TOKEN);
+                        else
+                        {
+                            //Mark skip and pass the value for the next loop
+                            currentToken = new Token(TokenType.ASSIGN_TOKEN);
+                            skippedChar = true;
+                            skippedCharValue = c;
+                        }
+                        state = StateType.DONE;
+                        break;
+                    case IN_LT:
+                        if(c == '='){
+                            currentToken = new Token(TokenType.LTEQ_TOKEN);
+                        }
+                        else {
+                            currentToken = new Token(TokenType.LT_TOKEN);
+                            //Mark skip and pass the value for the next loop
+                            skippedChar = true;
+                            skippedCharValue = c;
+                        }
+                        state = StateType.DONE;
+                        break;
+                    case IN_GT:
+                        if(c == '='){
+                            currentToken = new Token(TokenType.GTEQ_TOKEN);
+                        }
+                        else {
+                            currentToken = new Token(TokenType.GT_TOKEN);
+                            //Mark skip and pass the value for the next loop
+                            skippedChar = true;
+                            skippedCharValue = c;
+                        }
+                        state = StateType.DONE;
+                        break;
+                    case IN_NOT:
+                        if(c == '='){
+                            currentToken = new Token(TokenType.NOTEQ_TOKEN);
+                        }
+                        else {
+                            // if there is a ! without a = then it is an error
+                            currentToken = new Token(TokenType.ERROR_TOKEN);
+                            //Mark skip and pass the value for the next loop
+                            skippedChar = true;
+                            skippedCharValue = c;
+                        }
+                        state = StateType.DONE;
+                        break;
+                    case IN_COMMENT_START:
+                        if(c == '*')
+                        {
+                            state = StateType.IN_COMMENT;
+                        }
+                        else
+                        {
+                            currentToken = new Token(TokenType.DIV_TOKEN);
+                            
+                        }
                     case IN_COMMENT:
                         // Looking for the end of a comment
                         if(c == '*'){
