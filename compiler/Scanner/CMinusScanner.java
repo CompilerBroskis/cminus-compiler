@@ -19,6 +19,7 @@ public class CMinusScanner implements Scanner
         IN_NOT,
         IN_COMMENT,
         IN_COMMENT_START,
+        IN_COMMENT_END,
         IN_NUM,
         IN_DOUBLE,
         IN_ID,
@@ -209,16 +210,24 @@ public class CMinusScanner implements Scanner
                         else
                         {
                             currentToken = new Token(TokenType.DIV_TOKEN);
-                            
+                            skippedChar = true;
+                            skippedCharValue = c;
+                            state = StateType.DONE;
                         }
+                        break;
                     case IN_COMMENT:
                         // Looking for the end of a comment
-                        if(c == '*'){
-                            char nextC = (char)inFile.read();
-                        
-                            if(nextC == '/'){
-                                state = StateType.START; //Out of comment
-                            }                            
+                        if(c == '*'){                        
+                            state = StateType.IN_COMMENT_END;                     
+                        }
+                        break;
+                    case IN_COMMENT_END:
+                        if(c == '/'){
+                            state = StateType.START;
+                        }
+                        else
+                        {
+                            state = StateType.IN_COMMENT;
                         }
                         break;
                     case IN_NUM:
