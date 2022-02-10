@@ -1,0 +1,6 @@
+/* Comment **/
+*/
+void main(void)
+{ 
+    int 3za;
+}

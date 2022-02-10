@@ -261,6 +261,13 @@ public class CMinusScanner implements Scanner
                         }
                         else if(!Character.isDigit(c))
                         {
+                            //Prevent varaibles that start with numbers
+                            if(Character.isLetter(c)){
+                                currentToken = new Token(TokenType.ERROR_TOKEN); 
+                                state = StateType.DONE;
+                                break;
+                            }                   
+
                             try
                             {
                                 Integer intValue = Integer.parseInt(dataString);
