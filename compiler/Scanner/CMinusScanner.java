@@ -120,8 +120,6 @@ public class CMinusScanner implements Scanner
                             state = StateType.DONE;
                             switch(c)
                             {
-                                case 'z': // EOF
-                                    break;
                                 case '+':
                                     currentToken = new Token(TokenType.PLUS_TOKEN);
                                     break;
@@ -243,6 +241,8 @@ public class CMinusScanner implements Scanner
                         }
                         else
                         {
+                            skippedChar = true;
+                            skippedCharValue = c;
                             state = StateType.IN_COMMENT;
                         }
                         break;
@@ -298,7 +298,7 @@ public class CMinusScanner implements Scanner
                         }
                         break;
                     case IN_ID:
-                        if(!Character.isLetter(c))
+                        if(!Character.isLetter(c) && !Character.isDigit(c))
                         {
                             currentToken = checkForKeyword(dataString);
                             state = StateType.DONE;
@@ -319,8 +319,7 @@ public class CMinusScanner implements Scanner
                         currentToken = new Token(TokenType.ERROR_TOKEN);
                         break;
                 }
-            } 
-            
+            }             
             catch (IOException e)
             {
                 e.printStackTrace();
@@ -330,6 +329,7 @@ public class CMinusScanner implements Scanner
         return currentToken;
     }
 
+    //Function for checking if identifier is a keyword otherwise return the identifier
     private Token checkForKeyword(String dataString){
         if(dataString.equals("else"))
         {
