@@ -1,6 +1,8 @@
 package compiler.Scanner;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 
 import compiler.Scanner.Token.TokenType;
@@ -9,6 +11,8 @@ public class CMinusScanner implements Scanner
 {
     private BufferedReader inFile;
     private Token nextToken;
+    private boolean skippedChar = false;
+    private char skippedCharValue = '?';
 
     public enum StateType
     {
@@ -24,6 +28,12 @@ public class CMinusScanner implements Scanner
         IN_DOUBLE,
         IN_ID,
         DONE
+    }
+
+    public CMinusScanner(String filePath) throws FileNotFoundException 
+    {
+        this.inFile = new BufferedReader(new FileReader(filePath));
+        this.nextToken = scanToken(); // Fill nextToken with the first token
     }
 
     public Token getNextToken()
@@ -49,9 +59,6 @@ public class CMinusScanner implements Scanner
         // state always begins at start
         StateType state = StateType.START;
 
-        boolean skippedChar = false;
-        char skippedCharValue = '?';
-        
         String dataString = "";
 
         while(state != StateType.DONE)
@@ -108,7 +115,7 @@ public class CMinusScanner implements Scanner
                         {
                            state = StateType.IN_NOT;
                         }
-                        else if ((c == ' ') || (c == '\t') || (c == '\n'))
+                        else if ((c == ' ') || (c == '\t') || (c == '\n') || (c == '\r'))
                             // skip these characters
                             continue;
                         else if(c == '/')
