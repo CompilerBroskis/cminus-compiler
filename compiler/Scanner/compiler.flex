@@ -19,9 +19,10 @@
    this could be optimized */
 package compiler.Scanner;
 
-import compiler.Scanner.Scanner;
-import compiler.Scanner.Token;
 import compiler.Scanner.Token.TokenType;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 
 %%
@@ -31,18 +32,19 @@ import java.io.IOException;
 %implements Scanner
 %function next_token
 %type Token
-//implements sym
-
 %unicode
-
 %line
 %column
 
-%cup
-%cupdebug
-
 %{
   private Token nextToken;
+
+  public JFlexScanner(String filePath) throws FileNotFoundException, IOException
+  {
+      super();
+      this.zzReader = new BufferedReader(new FileReader(filePath));
+      this.nextToken = next_token(); // Fill nextToken with the first token
+  }
 
   public Token viewNextToken()
   {
