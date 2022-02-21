@@ -7,7 +7,7 @@ public class Test {
     public static void main(String[] args){
         try
         {
-            CMinusScanner scanner = new CMinusScanner("./euclid.txt");
+            CMinusScanner scanner = new CMinusScanner("./error.txt");
             while(scanner.viewNextToken().getTokenType() != TokenType.EOF_TOKEN){
                 Token nextToken = scanner.getNextToken();
                 System.out.println(nextToken.getTokenType());
