@@ -228,22 +228,83 @@ public class CMinusParser implements Parser
 	// statement -> expression-stmt | compound-stmt | selection-stmt | iteration-stmt | return-stmt
 	public Statement parseStatement()
 	{
-		return null;
+		// statement -> expression-stmt
+		if(scan.viewNextToken().getTokenType() == TokenType.SC_TOKEN 
+		|| scan.viewNextToken().getTokenType() == TokenType.ID_TOKEN
+		|| scan.viewNextToken().getTokenType() == TokenType.LP_TOKEN
+		|| scan.viewNextToken().getTokenType() == TokenType.NUM_TOKEN
+		)
+		{
+			return new Statement(parseExpressionStatement());
+		}
+		// statement -> compound-stmt
+		else if (scan.viewNextToken().getTokenType() == TokenType.LCB_TOKEN)
+		{
+			return new Statement(parseCompoundStatement());
+		}
+		// statement -> selection-stmt
+		else if (scan.viewNextToken().getTokenType() == TokenType.IF_TOKEN)
+		{
+			return new Statement(parseSelectionStatement());
+		}
+		// statement -> iteration-stmt
+		else if (scan.viewNextToken().getTokenType() == TokenType.WHILE_TOKEN)
+		{
+			return new Statement(parseIterationStatement());
+		}
+		// statement -> return-stmt
+		else if (scan.viewNextToken().getTokenType() == TokenType.RETURN_TOKEN)
+		{
+			return new Statement(parseReturnStatement());
+		}
+		throw new RuntimeException("Invalid Statement");
 	}
 
+	// expression-stmt -> [ expression ] ;
 	public ExpressionStatement parseExpressionStatement()
 	{
-		return null;
+		// expression-stmt -> ;
+		if(scan.viewNextToken().getTokenType() == TokenType.SC_TOKEN)
+		{
+			matchToken(TokenType.SC_TOKEN);
+			return new ExpressionStatement();
+		}
+		// expression-stmt -> expression ;
+		else
+		{
+			Expression e = parseExpression();
+			matchToken(TokenType.SC_TOKEN);
+			return new ExpressionStatement(e);
+		}
 	}
 
+	// selection-stmt -> if ( expression ) statement [ else statement ]
 	public SelectionStatement parseSelectionStatement()
 	{
-		return null;
+		matchToken(TokenType.IF_TOKEN);
+		matchToken(TokenType.LP_TOKEN);
+		Expression e = parseExpression();
+		matchToken(TokenType.RP_TOKEN);
+		Statement s1 = parseStatement();
+		Statement s2 = null;
+		if(scan.viewNextToken().getTokenType() == TokenType.ELSE_TOKEN)
+		{
+			matchToken(TokenType.ELSE_TOKEN);
+			s2 = parseStatement();
+		}
+
+		return new SelectionStatement(e, s1, s2);
 	}
 
+	// iteration-stmt -> while ( expression ) statement
 	public IterationStatement parseIterationStatement()
 	{
-		return null;
+		matchToken(TokenType.WHILE_TOKEN);
+		matchToken(TokenType.LP_TOKEN);
+		Expression e = parseExpression();
+		matchToken(TokenType.RP_TOKEN);
+		Statement s = parseStatement();
+		return new IterationStatement(e, s);
 	}
 
 	public ReturnStatement parseReturnStatement()
