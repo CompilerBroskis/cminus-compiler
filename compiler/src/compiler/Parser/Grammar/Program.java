@@ -20,10 +20,4 @@ public class Program
     {
         return declList;
     }
-
-    public Program parseProgram()
-    {
-
-        return null;
-    }
 }

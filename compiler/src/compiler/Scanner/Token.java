@@ -6,7 +6,8 @@ public class Token
     {
         ID_TOKEN, // identifier
         INT_TOKEN, // int
-        DOUBLE_TOKEN, // double
+        NUM_TOKEN, //int value
+        DOUBLE_TOKEN, // double value
         IF_TOKEN, // if
         ELSE_TOKEN, // else
         RETURN_TOKEN, // return

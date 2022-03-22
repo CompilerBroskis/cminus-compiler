@@ -271,7 +271,7 @@ public class CMinusScanner implements Scanner
                             try
                             {
                                 Integer intValue = Integer.parseInt(dataString);
-                                currentToken = new Token(TokenType.INT_TOKEN, intValue); 
+                                currentToken = new Token(TokenType.NUM_TOKEN, intValue); 
                                 state = StateType.DONE;
                                 dataString = ""; //Reset Data string
                             }
