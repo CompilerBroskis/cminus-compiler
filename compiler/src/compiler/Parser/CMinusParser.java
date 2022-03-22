@@ -307,49 +307,172 @@ public class CMinusParser implements Parser
 		return new IterationStatement(e, s);
 	}
 
+	// return-stmt -> return [ expression ] ;
 	public ReturnStatement parseReturnStatement()
 	{
-		return null;
+		matchToken(TokenType.RETURN_TOKEN);
+		
+		if(scan.viewNextToken().getTokenType() == TokenType.SC_TOKEN)
+		{
+			matchToken(TokenType.SC_TOKEN);
+			return new ReturnStatement(null);
+		}
+		
+		Expression e = parseExpression();
+		matchToken(TokenType.SC_TOKEN);
+		return new ReturnStatement(e);
 	}
 
+	// expression -> ID expression' | NUM simple-expression' | ( expression ) simple-expression'
 	public Expression parseExpression()
 	{
-		return null;
+		// expression -> ID expression'
+		if(scan.viewNextToken().getTokenType() == TokenType.ID_TOKEN)
+		{
+			Token id = scan.getNextToken();
+			ExpressionPrime ep = parseExpressionPrime();
+			return new Expression(id, ep);
+		}
+		// expression -> NUM simple-expression'
+		else if(scan.viewNextToken().getTokenType() == TokenType.NUM_TOKEN)
+		{
+			Token num = scan.getNextToken();
+			SimpleExpressionPrime sep = parseSimpleExpressionPrime();
+			return new Expression(num, sep);
+		}
+		// expression -> ( expression ) simple-expression'
+		else if(scan.viewNextToken().getTokenType() == TokenType.LP_TOKEN)
+		{
+			matchToken(TokenType.LP_TOKEN);
+			Expression e = parseExpression();
+			matchToken(TokenType.RP_TOKEN);
+			SimpleExpressionPrime sep = parseSimpleExpressionPrime();
+			return new Expression(e, sep);
+		}
+		
+		throw new RuntimeException("Invalid Expression");
 	}
 
+	//expression' -> = expression | [ expression ] expression'' | ( args ) | simple-expression' 
 	public ExpressionPrime parseExpressionPrime()
 	{
-		return null;
+		// expression' -> = expression
+		if(scan.viewNextToken().getTokenType() == TokenType.ASSIGN_TOKEN)
+		{
+			matchToken(TokenType.ASSIGN_TOKEN);
+			Expression e = parseExpression();
+			return new ExpressionPrime(e);
+		}
+		// expression' -> [ expression ] expression''
+		else if(scan.viewNextToken().getTokenType() == TokenType.LB_TOKEN)
+		{
+			matchToken(TokenType.LB_TOKEN);
+			Expression e = parseExpression();
+			matchToken(TokenType.RB_TOKEN);
+			ExpressionDoublePrime edp = parseExpressionDoublePrime();
+			return new ExpressionPrime(e, edp);
+		}
+		// expression' -> ( args )
+		else if(scan.viewNextToken().getTokenType() == TokenType.LP_TOKEN)
+		{
+			matchToken(TokenType.LP_TOKEN);
+			Expression[] args = parseArgs();
+			matchToken(TokenType.RP_TOKEN);
+			return new ExpressionPrime(args);
+		}
+		// expression' -> simple-expression' 
+		else if(scan.viewNextToken().getTokenType() == TokenType.PLUS_TOKEN 
+		|| scan.viewNextToken().getTokenType() == TokenType.MUL_TOKEN
+		|| scan.viewNextToken().getTokenType() == TokenType.GT_TOKEN
+		|| scan.viewNextToken().getTokenType() == TokenType.RP_TOKEN
+		|| scan.viewNextToken().getTokenType() == TokenType.SC_TOKEN)
+		{
+			return new ExpressionPrime(parseSimpleExpressionPrime());
+		}
+
+		throw new RuntimeException("Invalid Expression Prime");
 	}
 
+	//expression'' -> = expression | simple-expression'
 	public ExpressionDoublePrime parseExpressionDoublePrime()
 	{
-		return null;
+		// expression'' -> = expression
+		if(scan.viewNextToken().getTokenType() == TokenType.ASSIGN_TOKEN)
+		{
+			matchToken(TokenType.ASSIGN_TOKEN);
+			Expression e = parseExpression();
+			return new ExpressionDoublePrime(e);
+		}
+		// expression'' -> simple-expression' 
+		else if(scan.viewNextToken().getTokenType() == TokenType.PLUS_TOKEN 
+		|| scan.viewNextToken().getTokenType() == TokenType.MUL_TOKEN
+		|| scan.viewNextToken().getTokenType() == TokenType.DIV_TOKEN
+		|| scan.viewNextToken().getTokenType() == TokenType.MINUS_TOKEN
+		|| scan.viewNextToken().getTokenType() == TokenType.GT_TOKEN
+		|| scan.viewNextToken().getTokenType() == TokenType.RP_TOKEN
+		|| scan.viewNextToken().getTokenType() == TokenType.SC_TOKEN)
+		{
+			return new ExpressionDoublePrime(parseSimpleExpressionPrime());
+		}
+		
+		throw new RuntimeException("Invalid Expression Double Prime");
 	}
 
+	// simple-expression' -> additive-expression' [ relop additive-expression ]
 	public SimpleExpressionPrime parseSimpleExpressionPrime()
 	{
-		return null;
+		AdditiveExpressionPrime aep = parseAdditiveExpressionPrime();
+		Token r = null;
+		AdditiveExpression ae = null;
+
+		if(scan.viewNextToken().getTokenType() == TokenType.LTEQ_TOKEN
+		|| scan.viewNextToken().getTokenType() == TokenType.GTEQ_TOKEN
+		|| scan.viewNextToken().getTokenType() == TokenType.GT_TOKEN
+		|| scan.viewNextToken().getTokenType() == TokenType.LT_TOKEN
+		|| scan.viewNextToken().getTokenType() == TokenType.EQEQ_TOKEN
+		|| scan.viewNextToken().getTokenType() == TokenType.NOTEQ_TOKEN)
+		{
+			r = scan.getNextToken();
+			ae = parseAdditiveExpression();
+		}
+
+		return new SimpleExpressionPrime(aep, r, ae);
 	}
 
-	public String parseRelop()
-	{
-		return null;
-	}
-
+	// additive-expression -> term { addop term }
 	public AdditiveExpression parseAdditiveExpression()
 	{
-		return null;
+		Map<Expression, Token> terms = new TreeMap<Expression, Token>();
+
+		terms.put(parseTerm(), null);
+
+		while(scan.viewNextToken().getTokenType() == TokenType.PLUS_TOKEN || scan.viewNextToken().getTokenType() == TokenType.MINUS_TOKEN)
+		{
+			Token addop = scan.getNextToken();
+			terms.put(parseTerm(), addop);
+		}
+
+		return new AdditiveExpression(terms);
 	}
 
+	// additive-expression' -> term' { addop term }
 	public AdditiveExpressionPrime parseAdditiveExpressionPrime()
 	{
-		return null;
-	}
+		Map<Expression, Token> terms = new TreeMap<Expression, Token>();
 
-	public String parseAddop()
-	{
-		return null;
+		Expression termPrime = parseTermPrime();
+		if(termPrime != null)
+		{
+			terms.put(termPrime, null);
+		}
+
+		while(scan.viewNextToken().getTokenType() == TokenType.PLUS_TOKEN || scan.viewNextToken().getTokenType() == TokenType.MINUS_TOKEN)
+		{
+			Token addop = scan.getNextToken();
+			terms.put(parseTerm(), addop);
+		}
+
+		return new AdditiveExpressionPrime(terms);
 	}
 
 	public Expression parseTerm()
@@ -362,13 +485,25 @@ public class CMinusParser implements Parser
 		return null;
 	}
 
+	// factor -> ( expression ) | ID varcall | NUM
 	public Expression parseFactor()
 	{
-		return null;
-	}
-
-	public String parseMulop()
-	{
+		// factor -> ( expression )
+		if(scan.viewNextToken().getTokenType() == TokenType.LP_TOKEN)
+		{
+			matchToken(TokenType.LP_TOKEN);
+			Expression e = parseExpression();
+			matchToken(TokenType.RP_TOKEN);
+			return e;
+		}
+		// factor -> ID varcall
+		else if(scan.viewNextToken().getTokenType() == TokenType.ID_TOKEN)
+		{
+			Token id = scan.getNextToken();
+			String varcall = parseVarCall();
+			
+			return new Expression(exp, sep)
+		}
 		return null;
 	}
 
