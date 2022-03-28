@@ -20,4 +20,9 @@ public class Program
     {
         return declList;
     }
+
+    public void print() 
+    {
+        declList.print();
+    }
 }

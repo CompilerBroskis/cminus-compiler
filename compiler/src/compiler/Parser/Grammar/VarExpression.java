@@ -17,4 +17,10 @@ public class VarExpression extends Expression
     {
         return id;
     }
+
+    @Override
+    public String print() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

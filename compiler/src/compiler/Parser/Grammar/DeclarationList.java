@@ -8,4 +8,9 @@ public class DeclarationList
     {
         declarations = d;
     }
+
+    public void print()
+    {
+        
+    }
 }

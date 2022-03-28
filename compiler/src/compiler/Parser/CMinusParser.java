@@ -23,12 +23,11 @@ public class CMinusParser implements Parser
 		scan = new CMinusScanner(file);
 	}
 
-	public Program parse()
+	public void parse()
 	{
 		// parsing code here
-		Program program = new Program();
-		parseProgram();
-        return null;
+		Program program = parseProgram();
+        program.print();
 	}
 
 	public void matchToken(TokenType type)
