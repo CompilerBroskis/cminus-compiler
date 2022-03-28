@@ -2,14 +2,19 @@ package compiler.Parser.Grammar;
 
 import compiler.Scanner.Token;
 
-public class IDExpression extends Expression
+public class VarExpression extends Expression
 {
     private Token id;
     private Expression index;
 
-    public IDExpression(Token id, Expression index)
+    public VarExpression(Token id, Expression index)
     {
         this.id = id;
         this.index = index;
+    }
+
+    public Token getID()
+    {
+        return id;
     }
 }

@@ -10,4 +10,10 @@ public class NumExpression extends Expression
     {
         this.num = num;
     }
+
+    @Override
+    public String print() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

@@ -12,4 +12,10 @@ public class CallExpression extends Expression
         this.id = id;
         this.args = args;
     }
+
+    @Override
+    public String print() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }
