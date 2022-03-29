@@ -1,10 +1,5 @@
-import java.io.File;
-import java.io.FileWriter;
-
+import compiler.Parser.CMinusParser;
 import compiler.Scanner.CMinusScanner;
-import compiler.Scanner.JFlexScanner;
-import compiler.Scanner.Token;
-import compiler.Scanner.Token.TokenType;
 
 public class Test {
     
@@ -12,15 +7,18 @@ public class Test {
         try
         {
             CMinusScanner scanner = new CMinusScanner("./euclid.txt");
-            while(scanner.viewNextToken().getTokenType() != TokenType.EOF_TOKEN){
-                Token nextToken = scanner.getNextToken();
-                System.out.println(nextToken.getTokenType());
-                outputFile.write(nextToken.getTokenType().toString() + "\n");
-            }
-            Token nextToken = scanner.getNextToken();
-            System.out.println(nextToken.getTokenType());
-            outputFile.write(nextToken.getTokenType().toString() + "\n");
-            outputFile.close();
+            CMinusParser parser = new CMinusParser("./test.txt");
+            // while(scanner.viewNextToken().getTokenType() != TokenType.EOF_TOKEN){
+            //     Token nextToken = scanner.getNextToken();
+            //     System.out.println(nextToken.getTokenType());
+            //     outputFile.write(nextToken.getTokenType().toString() + "\n");
+            // }
+            // Token nextToken = scanner.getNextToken();
+            // System.out.println(nextToken.getTokenType());
+            // outputFile.write(nextToken.getTokenType().toString() + "\n");
+            // outputFile.close();
+
+            parser.parse();
         }
         catch(Exception e){
             e.printStackTrace();

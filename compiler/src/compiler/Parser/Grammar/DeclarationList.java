@@ -9,8 +9,11 @@ public class DeclarationList
         declarations = d;
     }
 
-    public void print()
+    public void print(String indent)
     {
-        
+        for(Declaration d : declarations)
+        {
+            d.print(indent);
+        }
     }
 }

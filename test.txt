@@ -1,0 +1,41 @@
+int x;
+int y;
+int a[1];
+
+void main(int test, int test2)
+{
+    y = 4;
+    x = y;
+    if(y == x)
+    {
+        int z;
+        z = a[3+2];
+    }
+    else if(3 >= 2)
+    {
+        int z;
+        z = 5*3;
+    }
+    else
+    {
+        int z;
+        z = 5*3;
+    }
+    test(10);
+}
+
+int test(int val)
+{
+    return val;
+}
+
+void testWhile()
+{
+    while(1 > 0)
+    {
+        int b;
+        int c;
+        b = 3+2*5/7;
+        c = (3+2)*(5/7);
+    }
+}

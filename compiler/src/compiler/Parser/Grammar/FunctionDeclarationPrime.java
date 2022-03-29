@@ -12,4 +12,25 @@ public class FunctionDeclarationPrime
         params = p;
         cs = CS;
     }
+
+    public void print(String indent) {
+        System.out.println(indent + "FunDeclPrime {");
+        
+        System.out.print(indent + " (");
+        if(params != null && params.length > 0)
+        {
+            
+            for(int i = 0; i < params.length; i++){
+                if(i > 0)
+                {
+                    System.out.print(", ");
+                }
+                System.out.print(params[i].tokenData());
+            }
+        }
+        System.out.print(")\n");
+        
+        cs.print(indent + " ");
+        System.out.println(indent + "}");
+    }
 }

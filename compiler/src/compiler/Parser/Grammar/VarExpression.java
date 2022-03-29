@@ -19,8 +19,13 @@ public class VarExpression extends Expression
     }
 
     @Override
-    public String print() {
-        // TODO Auto-generated method stub
-        return null;
+    public void print(String indent) {
+        System.out.println(indent + "Var: " + id.tokenData());
+        if(index !=null)
+        {
+            System.out.println(indent + "[");
+            index.print(indent + " ");
+            System.out.println(indent + "]");
+        }
     }
 }

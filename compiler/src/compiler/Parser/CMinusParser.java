@@ -8,10 +8,6 @@ import compiler.Scanner.Token.TokenType;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
-
-import javax.management.RuntimeErrorException;
 
 
 public class CMinusParser implements Parser
@@ -70,7 +66,7 @@ public class CMinusParser implements Parser
 	public Declaration parseDeclaration()
 	{
 		boolean isInt = scan.getNextToken().getTokenType() == TokenType.INT_TOKEN; // grabs the int or void
-		Token ID = scan.getNextToken(); // TODO: make sure to get data correctly
+		Token ID = scan.getNextToken();
 
 		// determine which production choice we're making
 		if(isInt)
@@ -165,7 +161,6 @@ public class CMinusParser implements Parser
 	{
 		matchToken(TokenType.INT_TOKEN);
 		Token id = scan.getNextToken();
-		//TODO: Look into storing array flag
 		if(scan.viewNextToken().getTokenType() == TokenType.LB_TOKEN){
 			matchToken(TokenType.LB_TOKEN);
 			matchToken(TokenType.RB_TOKEN);
@@ -404,48 +399,10 @@ public class CMinusParser implements Parser
 			return parseExpressionDoublePrime(vare);
 		}
 		// expression' -> simple-expression'
-		else if(scan.viewNextToken().getTokenType() == TokenType.LP_TOKEN)
+		else
 		{
 			return parseSimpleExpressionPrime(ide);
 		}
-
-		throw new RuntimeException("Invalid Expression Prime");
-
-		// // expression' -> = expression
-		// if(scan.viewNextToken().getTokenType() == TokenType.ASSIGN_TOKEN)
-		// {
-		// 	matchToken(TokenType.ASSIGN_TOKEN);
-		// 	Expression e = parseExpression();
-		// 	return new ExpressionPrime(e);
-		// }
-		// // expression' -> [ expression ] expression''
-		// else if(scan.viewNextToken().getTokenType() == TokenType.LB_TOKEN)
-		// {
-		// 	matchToken(TokenType.LB_TOKEN);
-		// 	Expression e = parseExpression();
-		// 	matchToken(TokenType.RB_TOKEN);
-		// 	ExpressionDoublePrime edp = parseExpressionDoublePrime();
-		// 	return new ExpressionPrime(e, edp);
-		// }
-		// // expression' -> ( args )
-		// else if(scan.viewNextToken().getTokenType() == TokenType.LP_TOKEN)
-		// {
-		// 	matchToken(TokenType.LP_TOKEN);
-		// 	Expression[] args = parseArgs();
-		// 	matchToken(TokenType.RP_TOKEN);
-		// 	return new ExpressionPrime(args);
-		// }
-		// // expression' -> simple-expression' 
-		// else if(scan.viewNextToken().getTokenType() == TokenType.PLUS_TOKEN 
-		// || scan.viewNextToken().getTokenType() == TokenType.MUL_TOKEN
-		// || scan.viewNextToken().getTokenType() == TokenType.GT_TOKEN
-		// || scan.viewNextToken().getTokenType() == TokenType.RP_TOKEN
-		// || scan.viewNextToken().getTokenType() == TokenType.SC_TOKEN)
-		// {
-		// 	return new ExpressionPrime(parseSimpleExpressionPrime());
-		// }
-
-		// throw new RuntimeException("Invalid Expression Prime");
 	}
 
 	//expression'' -> = expression | simple-expression'
@@ -462,27 +419,6 @@ public class CMinusParser implements Parser
 		{
 			return parseSimpleExpressionPrime(lhs);
 		}
-
-		// // expression'' -> = expression
-		// if(scan.viewNextToken().getTokenType() == TokenType.ASSIGN_TOKEN)
-		// {
-		// 	matchToken(TokenType.ASSIGN_TOKEN);
-		// 	Expression e = parseExpression();
-		// 	return new ExpressionDoublePrime(e);
-		// }
-		// // expression'' -> simple-expression' 
-		// else if(scan.viewNextToken().getTokenType() == TokenType.PLUS_TOKEN 
-		// || scan.viewNextToken().getTokenType() == TokenType.MUL_TOKEN
-		// || scan.viewNextToken().getTokenType() == TokenType.DIV_TOKEN
-		// || scan.viewNextToken().getTokenType() == TokenType.MINUS_TOKEN
-		// || scan.viewNextToken().getTokenType() == TokenType.GT_TOKEN
-		// || scan.viewNextToken().getTokenType() == TokenType.RP_TOKEN
-		// || scan.viewNextToken().getTokenType() == TokenType.SC_TOKEN)
-		// {
-		// 	return new ExpressionDoublePrime(parseSimpleExpressionPrime());
-		// }
-		
-		// throw new RuntimeException("Invalid Expression Double Prime");
 	}
 
 	// simple-expression' -> additive-expression' [ relop additive-expression ]

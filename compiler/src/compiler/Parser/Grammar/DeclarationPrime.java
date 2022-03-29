@@ -20,4 +20,23 @@ public class DeclarationPrime
     {
         num = NUM;
     }
+
+    public void print(String indent)
+    {
+        if(fdp != null || num != null)
+        {
+            System.out.println(indent + "Declaration Prime {");
+            if(fdp != null)
+            {
+                // fun-declaration'
+                fdp.print(indent + " ");
+            }
+            else if(num != null)
+            {
+                // [ NUM ]
+                System.out.println(indent + " [" + num.tokenData() + "]");
+            }
+            System.out.println(indent + "}");
+        }
+    }
 }

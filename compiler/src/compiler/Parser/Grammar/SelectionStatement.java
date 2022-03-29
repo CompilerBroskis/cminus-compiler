@@ -12,5 +12,21 @@ public class SelectionStatement {
         this.s1 = s1;
         this.s2 = s2;
     }
+
+    public void print(String indent) 
+    {
+        System.out.println(indent + "if {");
+        
+        e.print(indent + " ");
+        s1.print(indent + " ");
+
+        if(s2 != null)
+        {
+            System.out.println(indent + "else: ");
+            s2.print(indent + " ");
+        }
+        
+        System.out.println(indent + "}");
+    }
     
 }

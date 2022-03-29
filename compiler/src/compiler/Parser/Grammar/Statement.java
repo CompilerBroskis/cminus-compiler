@@ -31,4 +31,27 @@ public class Statement {
     {
         cs = s;
     }
+
+    public void print(String indent) {
+        if(es !=null)
+        {
+            es.print(indent + " ");
+        }       
+        else if(ss !=null)
+        {
+            ss.print(indent + " ");
+        }  
+        else if(is !=null)
+        {
+            is.print(indent + " ");
+        } 
+        else if(rs !=null)
+        {
+            rs.print(indent + " ");
+        } 
+        else if(cs !=null)
+        {
+            cs.print(indent + " ");
+        } 
+    }
 }

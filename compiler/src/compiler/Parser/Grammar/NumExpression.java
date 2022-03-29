@@ -12,8 +12,8 @@ public class NumExpression extends Expression
     }
 
     @Override
-    public String print() {
-        // TODO Auto-generated method stub
-        return null;
+    public void print(String indent) 
+    {
+        System.out.println(indent + num.tokenData());
     }
 }

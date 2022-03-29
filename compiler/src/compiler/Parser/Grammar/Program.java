@@ -23,6 +23,9 @@ public class Program
 
     public void print() 
     {
-        declList.print();
+        String indent = "   ";
+        System.out.println("Program {");
+        declList.print(indent);
+        System.out.println("}");
     }
 }

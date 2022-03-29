@@ -1,7 +1,5 @@
 package compiler.Parser.Grammar;
 
-import java.util.function.Function;
-
 import compiler.Scanner.Token;
 
 public class Declaration
@@ -36,5 +34,21 @@ public class Declaration
     {
 
         return null;
+    }
+
+    public void print(String indent)
+    {
+        System.out.println(indent + "Declaration {");
+        if(isInt())
+        {
+            System.out.println(indent + " int "+ ID.tokenData());
+            dp.print(indent + " ");
+        }
+        else
+        {
+            System.out.println(indent + " void " + ID.tokenData());
+            fdp.print(indent + " ");
+        }
+        System.out.println(indent + "}");
     }
 }

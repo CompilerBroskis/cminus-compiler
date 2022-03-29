@@ -12,4 +12,12 @@ public class ExpressionStatement {
     {
         e = exp;
     }
+
+    public void print(String indent) 
+    {
+        if(e !=null)
+        {
+            e.print(indent + " ");
+        }
+    }
 }

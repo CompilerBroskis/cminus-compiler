@@ -1,7 +1,5 @@
 package compiler.Parser.Grammar;
 
-import compiler.Scanner.Token;
-
 public class AssignExpression extends Expression
 {
     private Expression lhs;
@@ -11,5 +9,13 @@ public class AssignExpression extends Expression
     {
         this.lhs = lhs;
         this.rhs = rhs;
+    }
+
+    @Override
+    public void print(String indent) 
+    {
+        System.out.println(indent + "=");
+        lhs.print(indent + " ");
+        rhs.print(indent + " ");
     }
 }
