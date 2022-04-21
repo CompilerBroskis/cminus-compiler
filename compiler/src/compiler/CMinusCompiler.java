@@ -36,8 +36,10 @@ public class CMinusCompiler implements Compiler {
         try {
             Parser myParser = new CMinusParser(fileName);
 
+            //Automatically Prints tree
             Program parseTree = myParser.parse();
-            myParser.printAST(parseTree);
+            
+            //myParser.printAST(parseTree);
 
             CodeItem lowLevelCode = parseTree.genLLCode();
 

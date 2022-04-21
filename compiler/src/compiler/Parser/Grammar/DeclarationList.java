@@ -1,5 +1,7 @@
 package compiler.Parser.Grammar;
 
+import lowlevel.CodeItem;
+
 public class DeclarationList
 {
     private Declaration[] declarations;
@@ -15,5 +17,10 @@ public class DeclarationList
         {
             d.print(indent);
         }
+    }
+
+    public CodeItem genLLCode()
+    {
+        return null;
     }
 }
