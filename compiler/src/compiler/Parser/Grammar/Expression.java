@@ -1,6 +1,5 @@
 package compiler.Parser.Grammar;
 
-import lowlevel.CodeItem;
 import lowlevel.Function;
 
 public abstract class Expression {
@@ -19,5 +18,5 @@ public abstract class Expression {
 
     public abstract void print(String indent);
 
-    public abstract CodeItem genLLCode(Function function);
+    public abstract void genLLCode(Function function);
 }
