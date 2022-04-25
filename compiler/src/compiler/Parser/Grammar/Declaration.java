@@ -30,6 +30,21 @@ public class Declaration
         return (dp != null);
     }
 
+    public Token getToken()
+    {
+        return ID;
+    }
+
+    public DeclarationPrime getDeclarationPrime()
+    {
+        return dp;
+    }
+
+    public FunctionDeclarationPrime getFunDeclarationPrime()
+    {
+        return fdp;
+    }
+
     public Declaration parseDeclaration()
     {
 

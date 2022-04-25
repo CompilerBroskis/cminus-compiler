@@ -1,5 +1,7 @@
 package compiler.Parser.Grammar;
 
+import lowlevel.CodeItem;
+
 public class CompoundStatement {
 
     private VarExpression[] localDecls;
@@ -28,6 +30,11 @@ public class CompoundStatement {
         }
 
         System.out.println(indent + "}");
+    }
+
+    public CodeItem genLLCode()
+    {
+        
     }
     
 }
