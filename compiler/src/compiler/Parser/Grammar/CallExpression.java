@@ -1,6 +1,11 @@
 package compiler.Parser.Grammar;
 
 import compiler.Scanner.Token;
+import lowlevel.Function;
+import lowlevel.Operand;
+import lowlevel.Operation;
+import lowlevel.Operand.OperandType;
+import lowlevel.Operation.OperationType;
 
 public class CallExpression extends Expression
 {
@@ -29,5 +34,36 @@ public class CallExpression extends Expression
         System.out.println(indent + " )");
 
         System.out.println(indent + "}");
+    }
+
+    @Override
+    public void genLLCode(Function function)
+    {
+        for(Expression e : args)
+        {
+            // Call genCode on params to generate code for them
+            e.genLLCode(function);
+
+            // Add operation to move each param to register or memory
+            Operation operation = new Operation(OperationType.PASS, function.getCurrBlock());
+            Operand operand = new Operand(OperandType.REGISTER, e.getRegNum());
+            operation.setSrcOperand(0, operand);
+            operation.setDestOperand(0, new Operand(OperandType.REGISTER, function.getNewRegNum()));
+            function.getCurrBlock().appendOper(operation);
+        }
+        
+        // Add call operation
+        Operation callOperation = new Operation(OperationType.CALL, function.getCurrBlock());
+        Operand operand = new Operand(OperandType.STRING, id.tokenData().toString());
+        callOperation.setSrcOperand(0, operand);
+        function.getCurrBlock().appendOper(callOperation);
+
+        // May want to add a Macro Operation for PostCall
+        // TODO: Annotate Call with param size (?????)
+
+        // Need to move return register into regular register
+        // WHAT is a regular register?
+
+        
     }
 }

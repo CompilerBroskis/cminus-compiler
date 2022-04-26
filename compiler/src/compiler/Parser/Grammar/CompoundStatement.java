@@ -1,6 +1,7 @@
 package compiler.Parser.Grammar;
 
 import lowlevel.CodeItem;
+import lowlevel.Function;
 
 public class CompoundStatement {
 
@@ -32,9 +33,16 @@ public class CompoundStatement {
         System.out.println(indent + "}");
     }
 
-    public CodeItem genLLCode()
+    public void genLLCode(Function function) // return type may not be void
     {
-        
+        for(VarExpression v : localDecls)
+        {
+            v.genLLCode(function);
+        }
+        for(Statement s : statements)
+        {
+            Operation operation = s.genLLCode(function);
+        }
     }
     
 }

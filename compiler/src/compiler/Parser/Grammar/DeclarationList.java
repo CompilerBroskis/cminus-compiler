@@ -112,7 +112,7 @@ public class DeclarationList
                 BasicBlock block = function.getFirstBlock();
                 function.setCurrBlock(block);
 
-                fdp.getCompoundStatement().genLLCode();
+                fdp.getCompoundStatement().genLLCode(function);
 
                 if(item == null){
                     item = function;

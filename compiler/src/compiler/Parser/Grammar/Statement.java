@@ -1,5 +1,8 @@
 package compiler.Parser.Grammar;
 
+import lowlevel.CodeItem;
+import lowlevel.Function;
+
 public class Statement {
     private ExpressionStatement es;
     private SelectionStatement ss;
@@ -53,5 +56,30 @@ public class Statement {
         {
             cs.print(indent + " ");
         } 
+    }
+
+    public CodeItem genLLCode(Function function)
+    {
+        if(es !=null)
+        {
+            return es.genLLCode(function);
+        }       
+        else if(ss !=null)
+        {
+            return ss.genLLCode(function);
+        }  
+        else if(is !=null)
+        {
+            return is.genLLCode(function);
+        } 
+        else if(rs !=null)
+        {
+            return rs.genLLCode(function);
+        } 
+        else if(cs !=null)
+        {
+            return cs.genLLCode(function);
+        }
+        return null;
     }
 }
