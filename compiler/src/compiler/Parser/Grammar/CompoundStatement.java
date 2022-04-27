@@ -41,8 +41,10 @@ public class CompoundStatement {
         }
         for(Statement s : statements)
         {
-            Operation operation = s.genLLCode(function);
+            CodeItem codeItem = s.genLLCode(function);
         }
+        function.appendBlock(function.getReturnBlock()); // what
+        function.appendUnconnectedBlock(function.getFirstUnconnectedBlock());
     }
     
 }

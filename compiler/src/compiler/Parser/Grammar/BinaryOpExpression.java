@@ -128,8 +128,8 @@ public class BinaryOpExpression extends Expression
 
         // Get location of where children stored their results
         Operation operation = new Operation(getOperationType(), function.getCurrBlock());
-        Operand lhsOperand = new Operand(OperandType.REGISTER, lhs.getRegNum()); // REGISTER?
-        Operand rhsOperand = new Operand(OperandType.REGISTER, rhs.getRegNum()); // REGISTER?
+        Operand lhsOperand = new Operand(OperandType.REGISTER, lhs.getRegNum());
+        Operand rhsOperand = new Operand(OperandType.REGISTER, rhs.getRegNum());
         operation.setSrcOperand(0, lhsOperand);
         operation.setSrcOperand(1, rhsOperand);
 
