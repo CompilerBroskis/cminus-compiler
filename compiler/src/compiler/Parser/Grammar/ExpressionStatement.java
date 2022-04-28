@@ -1,5 +1,7 @@
 package compiler.Parser.Grammar;
 
+import lowlevel.Function;
+
 public class ExpressionStatement {
     private Expression e;
 
@@ -18,6 +20,14 @@ public class ExpressionStatement {
         if(e !=null)
         {
             e.print(indent + " ");
+        }
+    }
+
+    public void genLLCode(Function function)
+    {
+        if(e != null)
+        {
+            e.genLLCode(function);
         }
     }
 }

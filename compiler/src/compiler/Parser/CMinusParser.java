@@ -19,11 +19,13 @@ public class CMinusParser implements Parser
 		scan = new CMinusScanner(file);
 	}
 
-	public void parse()
+	public Program parse()
 	{
 		// parsing code here
 		Program program = parseProgram();
         program.print();
+
+		return program;
 	}
 
 	public void matchToken(TokenType type)

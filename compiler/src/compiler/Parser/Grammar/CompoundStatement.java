@@ -1,5 +1,8 @@
 package compiler.Parser.Grammar;
 
+import lowlevel.CodeItem;
+import lowlevel.Function;
+
 public class CompoundStatement {
 
     private VarExpression[] localDecls;
@@ -28,6 +31,20 @@ public class CompoundStatement {
         }
 
         System.out.println(indent + "}");
+    }
+
+    public void genLLCode(Function function) // return type may not be void
+    {
+        for(VarExpression v : localDecls)
+        {
+            v.genLLCode(function);
+        }
+        for(Statement s : statements)
+        {
+            CodeItem codeItem = s.genLLCode(function);
+        }
+        function.appendBlock(function.getReturnBlock()); // what
+        function.appendUnconnectedBlock(function.getFirstUnconnectedBlock());
     }
     
 }

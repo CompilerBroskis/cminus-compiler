@@ -13,6 +13,16 @@ public class FunctionDeclarationPrime
         cs = CS;
     }
 
+    public Token[] getParams()
+    {
+        return params;
+    }
+
+    public CompoundStatement getCompoundStatement()
+    {
+        return cs;
+    }
+
     public void print(String indent) {
         System.out.println(indent + "FunDeclPrime {");
         

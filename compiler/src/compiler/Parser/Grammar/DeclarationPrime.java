@@ -21,6 +21,11 @@ public class DeclarationPrime
         num = NUM;
     }
 
+    public FunctionDeclarationPrime getFunctionDeclarationPrime()
+    {
+        return fdp;
+    }
+
     public void print(String indent)
     {
         if(fdp != null || num != null)
