@@ -44,12 +44,18 @@ public class VarExpression extends Expression
             setRegNum((Integer)(function.getTable().get(varName)));
         }
         else if(CMinusCompiler.globalHash.containsKey(varName)){
-            setRegNum((Integer)(CMinusCompiler.globalHash.get(varName)));
-            
             // Create a load oper
             Operation loadOper = new Operation(OperationType.LOAD_I, function.getCurrBlock());
-            Operand destOperand = new Operand(OperandType.REGISTER, getRegNum());
+            int newRegNum = function.getNewRegNum();
+            Operand srcOperand = new Operand(OperandType.STRING, varName);
+            Operand destOperand = new Operand(OperandType.REGISTER, newRegNum);
             loadOper.setDestOperand(0, destOperand);
+            loadOper.setSrcOperand(0, srcOperand);
+
+            //Add to block
+            function.getCurrBlock().appendOper(loadOper);
+
+            setRegNum(newRegNum);
         }
     }
 }

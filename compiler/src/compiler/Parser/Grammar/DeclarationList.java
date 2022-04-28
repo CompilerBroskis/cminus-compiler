@@ -63,6 +63,10 @@ public class DeclarationList
                     function.setCurrBlock(block);
 
                     fdp.getCompoundStatement().genLLCode();
+
+                    // append the main chain then append the unconnected chain
+                    function.appendBlock(function.getReturnBlock());
+                    function.appendBlock(function.getFirstUnconnectedBlock());
                     
                     if(item == null){
                         item = function;
@@ -71,11 +75,15 @@ public class DeclarationList
                         item.setNextItem(function);
                         item = function;
                     }
+
                 }
                 else
                 {
+                    //Check if declprime has array
                     //vardecl
                     Data data = new Data(Data.TYPE_INT, decl.getToken().tokenData().toString());
+                    //public Data(int type, String newName, boolean array, int size) for if num !=null
+                    
                     if(item == null){
                         item = data;
                     }
@@ -105,15 +113,16 @@ public class DeclarationList
                         FuncParam newParam = new FuncParam(Data.TYPE_INT, p.tokenData().toString());
                         param.setNextParam(newParam);
                         param = newParam;
+                        // table.add var name and function.getnextregnum
                     }
                 }
 
                 function.createBlock0();
-                BasicBlock block = function.getFirstBlock();
+                BasicBlock block = new BasicBlock(function);
+                function.appendBlock(block);
                 function.setCurrBlock(block);
-
                 fdp.getCompoundStatement().genLLCode(function);
-
+                
                 if(item == null){
                     item = function;
                 }
@@ -121,6 +130,7 @@ public class DeclarationList
                     item.setNextItem(function);
                     item = function;
                 }
+                // append 
             }
         }
 

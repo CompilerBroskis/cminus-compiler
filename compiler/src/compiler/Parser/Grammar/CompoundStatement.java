@@ -5,10 +5,10 @@ import lowlevel.Function;
 
 public class CompoundStatement {
 
-    private VarExpression[] localDecls;
+    private String[] localDecls;
     private Statement[] statements;
 
-    public CompoundStatement(VarExpression[] localDecls, Statement[] statements) {
+    public CompoundStatement(String[] localDecls, Statement[] statements) {
         this.statements = statements;
         this.localDecls = localDecls;
     }
@@ -17,7 +17,7 @@ public class CompoundStatement {
         System.out.println(indent + "CompoundStatement {");
         
         if(localDecls !=null && localDecls.length > 0){
-            for(VarExpression e : localDecls)
+            for(String e : localDecls)
             {
                 e.print(indent + " ");
             }
@@ -35,16 +35,15 @@ public class CompoundStatement {
 
     public void genLLCode(Function function) // return type may not be void
     {
-        for(VarExpression v : localDecls)
+        for(String v : localDecls)
         {
-            v.genLLCode(function);
+            function.getTable().put(v, function.getNewRegNum());
         }
         for(Statement s : statements)
         {
-            CodeItem codeItem = s.genLLCode(function);
+            s.genLLCode(function);
         }
-        function.appendBlock(function.getReturnBlock()); // what
-        function.appendUnconnectedBlock(function.getFirstUnconnectedBlock());
+        
     }
     
 }
