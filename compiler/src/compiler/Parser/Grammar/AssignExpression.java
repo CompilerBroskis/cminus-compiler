@@ -36,5 +36,7 @@ public class AssignExpression extends Expression
         Operand rhsOperand = new Operand(OperandType.REGISTER, rhs.getRegNum());
         operation.setSrcOperand(0, rhsOperand);
         operation.setDestOperand(0, lhsOperand);
+
+        function.getCurrBlock().appendOper(operation);
     }
 }
