@@ -1,6 +1,11 @@
 package compiler.Parser.Grammar;
 
 import compiler.Scanner.Token;
+import lowlevel.BasicBlock;
+import lowlevel.CodeItem;
+import lowlevel.Data;
+import lowlevel.FuncParam;
+import lowlevel.Function;
 
 public class Declaration
 {
@@ -65,5 +70,62 @@ public class Declaration
             fdp.print(indent + " ");
         }
         System.out.println(indent + "}");
+    }
+
+    public CodeItem genLLCode() 
+    {
+        if(isInt() && getDeclarationPrime().getFunctionDeclarationPrime() == null)
+        {
+            //decl'
+            //Check if declprime has array
+            Data data = new Data(Data.TYPE_INT, getToken().tokenData().toString());
+            //public Data(int type, String newName, boolean array, int size) for if num !=null
+            
+            return data;
+        }
+        else 
+        {
+            //fundecl
+            FunctionDeclarationPrime fdp = null;
+            int type = -1;
+            if(getDeclarationPrime() !=null) {
+                fdp = getDeclarationPrime().getFunctionDeclarationPrime();
+                type = Data.TYPE_INT;
+            }
+            else {
+                fdp = getFunDeclarationPrime();
+                type = Data.TYPE_VOID;
+            }
+            Function function = new Function(type, getToken().tokenData().toString());
+            Token[] params = fdp.getParams();
+
+            FuncParam param = null;
+            for(Token p : params)
+            {
+                if(param == null)
+                {
+                    param = new FuncParam(Data.TYPE_INT, p.tokenData().toString());
+                    function.setFirstParam(param);
+                }
+                else{
+                    FuncParam newParam = new FuncParam(Data.TYPE_INT, p.tokenData().toString());
+                    param.setNextParam(newParam);
+                    param = newParam;
+                    function.getTable().put( p.tokenData().toString(), function.getNewRegNum());
+                }
+            }
+
+            function.createBlock0();
+            BasicBlock block = new BasicBlock(function);
+            function.appendBlock(block);
+            function.setCurrBlock(block);
+            fdp.getCompoundStatement().genLLCode(function);
+
+            // append the main chain then append the unconnected chain
+            function.appendBlock(function.getReturnBlock());
+            function.appendBlock(function.getFirstUnconnectedBlock());
+            
+            return function;
+        }
     }
 }

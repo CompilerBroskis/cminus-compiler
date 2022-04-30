@@ -25,18 +25,22 @@ public class ReturnStatement
         System.out.println(indent + "}");
     }
 
-    public CodeItem genLLCode(Function function)
+    public void genLLCode(Function function)
     {
         if(e != null)
         {
-            CodeItem expressionResult = e.genLLCode(function);
+            e.genLLCode(function);
             Operation moveToRetReg = new Operation(OperationType.PASS, function.getCurrBlock());
             Operand src = new Operand(OperandType.REGISTER, e.getRegNum());
-            Operand dest = new Operand(OperandType.REGISTER, "RetReg");
+            Operand dest = new Operand(OperandType.MACRO, "RetReg");
             moveToRetReg.setDestOperand(0, dest);
             moveToRetReg.setSrcOperand(0, src);
             function.getCurrBlock().appendOper(moveToRetReg);
-            // TODO: add jump operation to exit block
+
+            // add jump-to-return-block instruction
+            Operation jump = new Operation(OperationType.JMP, function.getCurrBlock());
+            Operand jumpDest = new Operand(OperandType.BLOCK, function.getReturnBlock());
+            jump.setDestOperand(0, jumpDest);
         }
     }
     

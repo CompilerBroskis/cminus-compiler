@@ -180,24 +180,24 @@ public class CMinusParser implements Parser
 	}
 
 	// local-declarations -> { int ID [ '[' NUM ']' ] ; }
-	public VarExpression[] parseLocalDeclarations()
+	public String[] parseLocalDeclarations()
 	{
-		List<VarExpression> decls = new ArrayList<VarExpression>();
+		List<String> decls = new ArrayList<String>();
 		while(scan.viewNextToken().getTokenType() == TokenType.INT_TOKEN)
 		{
 			matchToken(TokenType.INT_TOKEN);
 			Token id = scan.getNextToken();
-			NumExpression num = null;
+			Integer num = null;
 			if(scan.viewNextToken().getTokenType() == TokenType.LB_TOKEN)
 			{
 				matchToken(TokenType.LB_TOKEN);
-				num = new NumExpression(scan.getNextToken()); //NUM_TOKEN
+				num = (Integer)scan.getNextToken().tokenData(); // NUM_TOKEN
 				matchToken(TokenType.RB_TOKEN);
 			}
 			matchToken(TokenType.SC_TOKEN);
-			decls.add(new VarExpression(id, num));
+			decls.add(id.tokenData().toString());
 		}
-		return decls.toArray(new VarExpression[0]);
+		return decls.toArray(new String[0]);
 	}
 
 	// statement-list -> { statement }

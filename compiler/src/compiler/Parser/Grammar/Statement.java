@@ -58,28 +58,27 @@ public class Statement {
         } 
     }
 
-    public CodeItem genLLCode(Function function)
+    public void genLLCode(Function function)
     {
         if(es !=null)
         {
-            return es.genLLCode(function);
+            es.genLLCode(function);
         }       
         else if(ss !=null)
         {
-            return ss.genLLCode(function);
+            ss.genLLCode(function);
         }  
         else if(is !=null)
         {
-            return is.genLLCode(function);
+            is.genLLCode(function);
         } 
         else if(rs !=null)
         {
-            return rs.genLLCode(function);
+            rs.genLLCode(function);
         } 
         else if(cs !=null)
         {
-            return cs.genLLCode(function);
+            cs.genLLCode(function);
         }
-        return null;
     }
 }

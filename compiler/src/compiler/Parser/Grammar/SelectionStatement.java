@@ -42,11 +42,10 @@ public class SelectionStatement {
         if(s2 == null)
         {
             // Make Blocks
-            BasicBlock thenBlock = new BasicBlock(function); // not sure if this goes here yet
+            BasicBlock thenBlock = new BasicBlock(function);
             BasicBlock postBlock = new BasicBlock(function);
 
             // Generate branch condition
-            //e.genLLCode(function);
             Operation compare = new Operation(OperationType.PASS, function.getCurrBlock());
             Operand src = new Operand(OperandType.REGISTER, e.getRegNum());
             int destRegNum = function.getNewRegNum();
@@ -79,8 +78,6 @@ public class SelectionStatement {
         else
         // if statement WITH else
         {
-            // TODO: if's with else
-
             // Make Blocks
             BasicBlock thenBlock = new BasicBlock(function); // not sure if this goes here yet
             BasicBlock elseBlock = new BasicBlock(function);
@@ -123,8 +120,16 @@ public class SelectionStatement {
             s2.genLLCode(function);
 
             // Append the jump-to-post operation to the else block
-            Operation jump; // NOT DONE YET
-            function.getCurrBlock().appendOper(newOper);
+            Operation jump = new Operation(OperationType.JMP, function.getCurrBlock());
+            Operand jumpDest = new Operand(OperandType.BLOCK, postBlock);
+            jump.setDestOperand(0, jumpDest);
+            function.getCurrBlock().appendOper(jump);
+
+            // Append the else block to the unconnected chain
+            function.appendUnconnectedBlock(elseBlock);
+
+            // Set current block to post
+            function.setCurrBlock(postBlock);
         }
     }
 }

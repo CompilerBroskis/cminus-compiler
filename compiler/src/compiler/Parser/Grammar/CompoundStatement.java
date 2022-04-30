@@ -19,7 +19,7 @@ public class CompoundStatement {
         if(localDecls !=null && localDecls.length > 0){
             for(String e : localDecls)
             {
-                e.print(indent + " ");
+                System.out.println(indent + e);
             }
         }
 
