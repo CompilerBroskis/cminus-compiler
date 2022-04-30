@@ -26,20 +26,21 @@ public class DeclarationList
 
     public CodeItem genLLCode()
     {
-        CodeItem item = null;
+        CodeItem headItem = null;
+        CodeItem currItem = null;
         for(Declaration decl : declarations)
         {
             CodeItem declItem = decl.genLLCode();
-            if(item == null){
-                item = declItem;
+            if(headItem == null){
+                headItem = declItem;
             }
             else{
-                item.setNextItem(declItem);
-                item = declItem;
+                currItem.setNextItem(declItem);
             }
+            currItem = declItem;
         }
 
 
-        return item;
+        return headItem;
     }
 }

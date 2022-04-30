@@ -33,8 +33,8 @@ public class ReturnStatement
             Operation moveToRetReg = new Operation(OperationType.PASS, function.getCurrBlock());
             Operand src = new Operand(OperandType.REGISTER, e.getRegNum());
             Operand dest = new Operand(OperandType.MACRO, "RetReg");
-            moveToRetReg.setDestOperand(0, dest);
             moveToRetReg.setSrcOperand(0, src);
+            moveToRetReg.setDestOperand(0, dest);
             function.getCurrBlock().appendOper(moveToRetReg);
 
             // add jump-to-return-block instruction

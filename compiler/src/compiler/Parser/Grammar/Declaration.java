@@ -99,19 +99,21 @@ public class Declaration
             Function function = new Function(type, getToken().tokenData().toString());
             Token[] params = fdp.getParams();
 
-            FuncParam param = null;
-            for(Token p : params)
-            {
-                if(param == null)
+            if(params !=null){
+                FuncParam param = null;
+                for(Token p : params)
                 {
-                    param = new FuncParam(Data.TYPE_INT, p.tokenData().toString());
-                    function.setFirstParam(param);
-                }
-                else{
-                    FuncParam newParam = new FuncParam(Data.TYPE_INT, p.tokenData().toString());
-                    param.setNextParam(newParam);
-                    param = newParam;
-                    function.getTable().put( p.tokenData().toString(), function.getNewRegNum());
+                    if(param == null)
+                    {
+                        param = new FuncParam(Data.TYPE_INT, p.tokenData().toString());
+                        function.setFirstParam(param);
+                    }
+                    else{
+                        FuncParam newParam = new FuncParam(Data.TYPE_INT, p.tokenData().toString());
+                        param.setNextParam(newParam);
+                        param = newParam;
+                        function.getTable().put( p.tokenData().toString(), function.getNewRegNum());
+                    }
                 }
             }
 
@@ -123,7 +125,10 @@ public class Declaration
 
             // append the main chain then append the unconnected chain
             function.appendBlock(function.getReturnBlock());
-            function.appendBlock(function.getFirstUnconnectedBlock());
+            if(function.getFirstUnconnectedBlock() !=null)
+            {
+                function.appendBlock(function.getFirstUnconnectedBlock());
+            }
             
             return function;
         }

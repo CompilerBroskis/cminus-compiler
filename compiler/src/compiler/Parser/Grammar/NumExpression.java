@@ -2,6 +2,10 @@ package compiler.Parser.Grammar;
 
 import compiler.Scanner.Token;
 import lowlevel.Function;
+import lowlevel.Operand;
+import lowlevel.Operation;
+import lowlevel.Operand.OperandType;
+import lowlevel.Operation.OperationType;
 
 public class NumExpression extends Expression
 {
@@ -22,8 +26,14 @@ public class NumExpression extends Expression
     public void genLLCode(Function function)
     {
         // Assign yourself a register
-        setRegNum(function.getNewRegNum()); // right???
+        int regNum = function.getNewRegNum();
+        setRegNum(regNum);
 
-        // How does the register know the value of the num expression?
+        Operation operation = new Operation(OperationType.PASS, function.getCurrBlock()); // should operation type be pass, load or store?
+        Operand src = new Operand(OperandType.INTEGER, num.tokenData());
+        Operand dest = new Operand(OperandType.REGISTER, regNum);
+        operation.setSrcOperand(0, src);
+        operation.setDestOperand(0, dest);
+        function.getCurrBlock().appendOper(operation);
     }
 }
