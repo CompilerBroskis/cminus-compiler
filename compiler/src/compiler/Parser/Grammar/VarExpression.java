@@ -47,15 +47,14 @@ public class VarExpression extends Expression
             // Create a load oper
             Operation loadOper = new Operation(OperationType.LOAD_I, function.getCurrBlock());
             int newRegNum = function.getNewRegNum();
+            setRegNum(newRegNum);
             Operand srcOperand = new Operand(OperandType.STRING, varName);
             Operand destOperand = new Operand(OperandType.REGISTER, newRegNum);
-            loadOper.setDestOperand(0, destOperand);
             loadOper.setSrcOperand(0, srcOperand);
+            loadOper.setDestOperand(0, destOperand);
 
             //Add to block
             function.getCurrBlock().appendOper(loadOper);
-
-            setRegNum(newRegNum);
         }
     }
 }

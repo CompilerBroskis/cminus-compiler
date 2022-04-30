@@ -121,8 +121,10 @@ public class SelectionStatement {
 
             // Append the jump-to-post operation to the else block
             Operation jump = new Operation(OperationType.JMP, function.getCurrBlock());
-            Operand jumpDest = new Operand(OperandType.BLOCK, postBlock);
+            Operand jumpDest = new Operand(OperandType.BLOCK, postBlock.getBlockNum());
+            Operand jumpSrc = new Operand(OperandType.BLOCK, postBlock.getBlockNum());
             jump.setDestOperand(0, jumpDest);
+            jump.setSrcOperand(0, jumpSrc);
             function.getCurrBlock().appendOper(jump);
 
             // Append the else block to the unconnected chain

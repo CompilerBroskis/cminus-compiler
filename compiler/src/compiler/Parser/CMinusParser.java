@@ -116,7 +116,7 @@ public class CMinusParser implements Parser
 	{
 		matchToken(TokenType.LP_TOKEN);
 		Token[] params = null;
-		if(scan.viewNextToken().getTokenType() == TokenType.INT_TOKEN)
+		if(scan.viewNextToken().getTokenType() == TokenType.INT_TOKEN || scan.viewNextToken().getTokenType() == TokenType.VOID_TOKEN)
 		{
 			params = parseParams();
 		}

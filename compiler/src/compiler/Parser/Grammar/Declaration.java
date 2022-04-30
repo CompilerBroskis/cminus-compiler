@@ -1,6 +1,8 @@
 package compiler.Parser.Grammar;
 
+import compiler.CMinusCompiler;
 import compiler.Scanner.Token;
+import compiler.Scanner.Token.TokenType;
 import lowlevel.BasicBlock;
 import lowlevel.CodeItem;
 import lowlevel.Data;
@@ -80,6 +82,8 @@ public class Declaration
             //Check if declprime has array
             Data data = new Data(Data.TYPE_INT, getToken().tokenData().toString());
             //public Data(int type, String newName, boolean array, int size) for if num !=null
+            CMinusCompiler.globalHash.put(getToken().tokenData().toString(), getToken().tokenData().toString());
+
             
             return data;
         }
@@ -100,20 +104,29 @@ public class Declaration
             Token[] params = fdp.getParams();
 
             if(params !=null){
-                FuncParam param = null;
+                FuncParam headParam = null;
+                FuncParam currentParam = null;
                 for(Token p : params)
                 {
-                    if(param == null)
+                    FuncParam newParam = null;
+                    if(p.getTokenType() == TokenType.VOID_TOKEN){
+                        continue;
+                    }
+                    else 
                     {
-                        param = new FuncParam(Data.TYPE_INT, p.tokenData().toString());
-                        function.setFirstParam(param);
+                        newParam = new FuncParam(Data.TYPE_INT, p.tokenData().toString());
                     }
-                    else{
-                        FuncParam newParam = new FuncParam(Data.TYPE_INT, p.tokenData().toString());
-                        param.setNextParam(newParam);
-                        param = newParam;
-                        function.getTable().put( p.tokenData().toString(), function.getNewRegNum());
+
+                    if(headParam == null)
+                    {
+                        headParam = newParam;
+                        function.setFirstParam(headParam);
                     }
+                    else{                        
+                        currentParam.setNextParam(newParam);
+                        function.getTable().put(p.tokenData().toString(), function.getNewRegNum());
+                    }
+                    currentParam = newParam;
                 }
             }
 

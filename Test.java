@@ -11,7 +11,7 @@ public class Test {
             CMinusScanner scanner = new CMinusScanner("./euclid.txt");
             CMinusParser parser = new CMinusParser("./test.txt");
             CMinusCompiler compiler = new CMinusCompiler();
-            compiler.compile("./lltest");
+            compiler.compile("./testcode");
             //PrintStream ps = new PrintStream("./output.txt");
             //System.setOut(ps);
             // while(scanner.viewNextToken().getTokenType() != TokenType.EOF_TOKEN){

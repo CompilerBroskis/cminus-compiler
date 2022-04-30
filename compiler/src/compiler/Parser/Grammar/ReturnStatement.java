@@ -20,7 +20,10 @@ public class ReturnStatement
     {
         System.out.println(indent + "return {");
         
-        e.print(indent + " ");
+        if(e !=null)
+        {
+            e.print(indent + " ");
+        }
         
         System.out.println(indent + "}");
     }
@@ -39,8 +42,12 @@ public class ReturnStatement
 
             // add jump-to-return-block instruction
             Operation jump = new Operation(OperationType.JMP, function.getCurrBlock());
-            Operand jumpDest = new Operand(OperandType.BLOCK, function.getReturnBlock());
+            Operand jumpDest = new Operand(OperandType.BLOCK, function.getReturnBlock().getBlockNum());
+            Operand jumpSrc = new Operand(OperandType.BLOCK, function.getReturnBlock().getBlockNum());
             jump.setDestOperand(0, jumpDest);
+            jump.setSrcOperand(0, jumpSrc);
+
+            function.getCurrBlock().appendOper(jump);
         }
     }
     
