@@ -120,6 +120,7 @@ public class Declaration
                     if(headParam == null)
                     {
                         headParam = newParam;
+                        function.getTable().put(p.tokenData().toString(), function.getNewRegNum());
                         function.setFirstParam(headParam);
                     }
                     else{                        

@@ -49,8 +49,8 @@ public class IterationStatement {
         Operand beqSrc1 = new Operand(OperandType.INTEGER, 0);
         Operand beqDest = new Operand(OperandType.BLOCK, postBlock.getBlockNum());
         beq.setSrcOperand(0, beqSrc0);
-        beq.setSrcOperand(0, beqSrc1);
-        beq.setDestOperand(0, beqDest);
+        beq.setSrcOperand(1, beqSrc1);
+        beq.setSrcOperand(2, beqDest);
         function.getCurrBlock().appendOper(beq);
 
         // Append the then block
@@ -60,13 +60,25 @@ public class IterationStatement {
         // Call codeGen on the then block
         s.genLLCode(function);
 
+        
+        // Generate branch condition
+        Operation compare2 = new Operation(OperationType.PASS, function.getCurrBlock());
+        Operand src2 = new Operand(OperandType.REGISTER, e.getRegNum());
+        int destRegNum2 = function.getNewRegNum();
+        Operand dest2 = new Operand(OperandType.REGISTER, destRegNum2);
+        compare2.setSrcOperand(0, src2);
+        compare2.setDestOperand(0, dest2);
+        function.getCurrBlock().appendOper(compare2);
+        
         // Re-do check to create while loop
-        // If this doesn't work, regenerate the branch condition
+        
         Operation bne = new Operation(OperationType.BNE, function.getCurrBlock());
         Operand bneDest = new Operand(OperandType.BLOCK, whileBlock.getBlockNum());
-        bne.setSrcOperand(0, beqSrc0);
-        bne.setSrcOperand(0, beqSrc1);
-        bne.setDestOperand(0, bneDest);
+        Operand bneSrc0 = new Operand(OperandType.REGISTER, destRegNum2);
+        Operand bneSrc1 = new Operand(OperandType.INTEGER, 0);
+        bne.setSrcOperand(0, bneSrc0);
+        bne.setSrcOperand(1, bneSrc1);
+        bne.setSrcOperand(2, bneDest);
         function.getCurrBlock().appendOper(bne);
 
 

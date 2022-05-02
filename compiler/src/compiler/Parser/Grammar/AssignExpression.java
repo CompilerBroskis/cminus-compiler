@@ -28,9 +28,10 @@ public class AssignExpression extends Expression
     @Override
     public void genLLCode(Function function)
     {
-        lhs.genLLCode(function);
+        // lhs.genLLCode(function);
         rhs.genLLCode(function);
-        
+        //if local var is true then move rhs into lhs
+        //if global do a store
         Operation operation = new Operation(OperationType.ASSIGN, function.getCurrBlock());
         Operand lhsOperand = new Operand(OperandType.REGISTER, lhs.getRegNum());
         Operand rhsOperand = new Operand(OperandType.REGISTER, rhs.getRegNum());

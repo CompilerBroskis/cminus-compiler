@@ -60,8 +60,8 @@ public class SelectionStatement {
             Operand beqSrc1 = new Operand(OperandType.INTEGER, 0);
             Operand beqDest = new Operand(OperandType.BLOCK, postBlock.getBlockNum());
             beq.setSrcOperand(0, beqSrc0);
-            beq.setSrcOperand(0, beqSrc1);
-            beq.setDestOperand(0, beqDest);
+            beq.setSrcOperand(1, beqSrc1);
+            beq.setSrcOperand(2, beqDest);
             function.getCurrBlock().appendOper(beq);
 
             // Append the then block
@@ -98,8 +98,8 @@ public class SelectionStatement {
             Operand beqSrc1 = new Operand(OperandType.INTEGER, 0);
             Operand beqDest = new Operand(OperandType.BLOCK, elseBlock.getBlockNum());
             beq.setSrcOperand(0, beqSrc0);
-            beq.setSrcOperand(0, beqSrc1);
-            beq.setDestOperand(0, beqDest);
+            beq.setSrcOperand(1, beqSrc1);
+            beq.setSrcOperand(2, beqDest);
             function.getCurrBlock().appendOper(beq);
 
             // Append the then block

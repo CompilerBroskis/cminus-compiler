@@ -1,6 +1,7 @@
 package compiler.Parser.Grammar;
 
 import compiler.Scanner.Token;
+import lowlevel.Attribute;
 import lowlevel.Function;
 import lowlevel.Operand;
 import lowlevel.Operation;
@@ -53,18 +54,17 @@ public class CallExpression extends Expression
         }
         
         // Add call operation
+
         Operation callOperation = new Operation(OperationType.CALL, function.getCurrBlock());
         Operand operand = new Operand(OperandType.STRING, id.tokenData().toString());
         callOperation.setSrcOperand(0, operand);
+        callOperation.addAttribute(new Attribute("numParams", "" + args.length));
+
         function.getCurrBlock().appendOper(callOperation);
 
         // May want to add a Macro Operation for PostCall
-
-        // TODO: Annotate Call with param size (?????)
-
-        // Need to move return register into regular register
-        // WHAT is a regular register?
-
+        //Add operation like varexpression
+        //get new register and move it to retreg
         
     }
 }
