@@ -40,6 +40,7 @@ public class VarExpression extends Expression
     public void genLLCode(Function function) {
         String varName = id.tokenData().toString();
 
+        // checking for local variable
         if(function.getTable().containsKey(varName)){
             setRegNum((Integer)(function.getTable().get(varName)));
         }
@@ -55,6 +56,10 @@ public class VarExpression extends Expression
 
             //Add to block
             function.getCurrBlock().appendOper(loadOper);
+        }
+        else
+        {
+            setRegNum(-5);
         }
     }
 }

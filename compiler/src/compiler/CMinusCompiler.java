@@ -43,6 +43,30 @@ public class CMinusCompiler implements Compiler {
 
             CodeItem lowLevelCode = parseTree.genLLCode();
 
+            CodeItem firstBlock = lowLevelCode.getNextItem();
+            // while(firstBlock != null)
+            // {
+            //     if(firstBlock instanceof Function)
+            //     {
+            //         BasicBlock block = ((Function)firstBlock).getFirstBlock();
+            //         while(block !=null){
+                        
+            //             Operation operation = block.getFirstOper();
+            //             while(operation !=null){
+            //                 Operand operand = operation.getDestOperand(0);
+            //                 if(operand !=null && operand.getValue() instanceof Integer){
+            //                     int regNum = ( (Integer) operand.getValue()).intValue();
+            //                     System.out.println(operation.getType() + " " + regNum);
+            //                 }
+            //                 operation = operation.getNextOper();
+            //             }
+
+            //             block = block.getNextBlock();
+            //         }
+            //     }
+            //     firstBlock = firstBlock.getNextItem();
+            // }
+            
             fileName = filePrefix + ".ll";
             PrintWriter outFile =
                     new PrintWriter(new BufferedWriter(new FileWriter(fileName)));

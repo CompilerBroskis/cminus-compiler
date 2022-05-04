@@ -135,9 +135,9 @@ public class BinaryOpExpression extends Expression
 
         int newRegNum = function.getNewRegNum();
         // Choose a location for your result
+        setRegNum(newRegNum);
         Operand destOperand = new Operand(OperandType.REGISTER, newRegNum);
         operation.setDestOperand(0, destOperand);
-        setRegNum(newRegNum);
 
         // Add operation to do to your function
         function.getCurrBlock().appendOper(operation);

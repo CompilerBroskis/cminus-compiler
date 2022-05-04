@@ -4,16 +4,14 @@
   (BB 2
   )
   (BB 3
-    (OPER 14 Mov [(m EDI)]  [(i 99)])
+    (OPER 11 Mov [(m EDI)]  [(i 99)])
     (OPER 5 Mov [(r 1)]  [(r 4)])
-    (OPER 15 Mov [(m EDI)]  [(i 100)])
+    (OPER 12 Mov [(m EDI)]  [(i 100)])
     (OPER 7 Mov [(r 2)]  [(r 5)])
-    (OPER 16 Mov [(r 6)]  [(r 2)])
+    (OPER 13 Mov [(r 6)]  [(r 2)])
     (OPER 8 Add_I [(r 6)]  [(r 6)(r 1)])
     (OPER 9 Mov [(r 3)]  [(r 6)])
-    (OPER 10 Store [(s c)]  [(r 2)])
-    (OPER 11 Load [(r 7)]  [(s c)])
-    (OPER 17 Mov [(m EDI)]  [(r 7)])
+    (OPER 10 Store []  [(r 2)(s c)])
   )
   (BB 1
     (OPER 2 Return []  [(m EAX)])

@@ -1,6 +1,7 @@
 package compiler.Parser.Grammar;
 
 import compiler.Scanner.Token;
+import lowlevel.Attribute;
 import lowlevel.Function;
 import lowlevel.Operand;
 import lowlevel.Operation;
@@ -29,7 +30,8 @@ public class NumExpression extends Expression
         int regNum = function.getNewRegNum();
         setRegNum(regNum);
 
-        Operation operation = new Operation(OperationType.PASS, function.getCurrBlock()); // should operation type be pass, load or store?
+        Operation operation = new Operation(OperationType.PASS, function.getCurrBlock());
+        operation.addAttribute(new Attribute("PARAM_NUM", Integer.toString(0)));
         Operand src = new Operand(OperandType.INTEGER, num.tokenData());
         Operand dest = new Operand(OperandType.REGISTER, regNum);
         operation.setSrcOperand(0, src);

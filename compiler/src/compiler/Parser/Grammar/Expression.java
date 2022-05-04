@@ -4,7 +4,7 @@ import lowlevel.Function;
 
 public abstract class Expression {
 
-    private int regNum = -1;
+    private int regNum = -2;
 
     public void setRegNum(int num)
     {

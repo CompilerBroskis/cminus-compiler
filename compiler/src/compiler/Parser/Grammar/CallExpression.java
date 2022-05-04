@@ -40,6 +40,7 @@ public class CallExpression extends Expression
     @Override
     public void genLLCode(Function function)
     {
+        int index = 0;
         for(Expression e : args)
         {
             // Call genCode on params to generate code for them
@@ -47,10 +48,14 @@ public class CallExpression extends Expression
 
             // Add operation to move each param to register or memory
             Operation operation = new Operation(OperationType.PASS, function.getCurrBlock());
+            operation.addAttribute(new Attribute("PARAM_NUM", Integer.toString(index)));
+
             Operand operand = new Operand(OperandType.REGISTER, e.getRegNum());
             operation.setSrcOperand(0, operand);
-            operation.setDestOperand(0, new Operand(OperandType.REGISTER, function.getNewRegNum()));
+            Operand dest = new Operand(OperandType.REGISTER, function.getNewRegNum());
+            operation.setDestOperand(0, dest);
             function.getCurrBlock().appendOper(operation);
+            index++;
         }
         
         // Add call operation
@@ -65,6 +70,13 @@ public class CallExpression extends Expression
         // May want to add a Macro Operation for PostCall
         //Add operation like varexpression
         //get new register and move it to retreg
-        
+        int newReg = function.getNewRegNum();
+        setRegNum(newReg);
+        Operation store = new Operation(OperationType.STORE_I, function.getCurrBlock());
+        Operand src = new Operand(OperandType.REGISTER, newReg);
+        Operand dest = new Operand(OperandType.MACRO, "RetReg");
+        store.setSrcOperand(0, src);
+        store.setDestOperand(0, dest);
+        function.getCurrBlock().appendOper(store);
     }
 }

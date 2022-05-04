@@ -1,5 +1,6 @@
 package compiler.Parser.Grammar;
 
+import lowlevel.Attribute;
 import lowlevel.BasicBlock;
 import lowlevel.Function;
 import lowlevel.Operand;
@@ -45,8 +46,11 @@ public class SelectionStatement {
             BasicBlock thenBlock = new BasicBlock(function);
             BasicBlock postBlock = new BasicBlock(function);
 
+            e.genLLCode(function);
+
             // Generate branch condition
             Operation compare = new Operation(OperationType.PASS, function.getCurrBlock());
+            compare.addAttribute(new Attribute("PARAM_NUM", Integer.toString(0)));
             Operand src = new Operand(OperandType.REGISTER, e.getRegNum());
             int destRegNum = function.getNewRegNum();
             Operand dest = new Operand(OperandType.REGISTER, destRegNum);
@@ -83,8 +87,11 @@ public class SelectionStatement {
             BasicBlock elseBlock = new BasicBlock(function);
             BasicBlock postBlock = new BasicBlock(function);
 
+            e.genLLCode(function);
+
             // Generate the branch condition
             Operation compare = new Operation(OperationType.PASS, function.getCurrBlock());
+            compare.addAttribute(new Attribute("PARAM_NUM", Integer.toString(0)));
             Operand src = new Operand(OperandType.REGISTER, e.getRegNum());
             int destRegNum = function.getNewRegNum();
             Operand dest = new Operand(OperandType.REGISTER, destRegNum);
